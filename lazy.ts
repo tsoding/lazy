@@ -194,4 +194,4 @@ function sieve(xs: LazyList<number>): LazyList<number> {
 
 let prime = sieve(range(() => 2));
 
-printList(prime);
+printList(take(() => 10, prime));

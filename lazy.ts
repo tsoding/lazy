@@ -92,10 +92,10 @@ function toList<T>(xs: T[]): LazyList<T> {
 
 console.log(toList([1, 2, 3]));
 console.log(toList([1, 2, 3])());
-console.log(toList([1, 2, 3])().head());
-console.log(toList([1, 2, 3])().tail().head());
-console.log(toList([1, 2, 3])().tail().tail().head());
-console.log(toList([1, 2, 3])().tail().tail().tail());
+console.log(toList([1, 2, 3])()!.head());
+console.log(toList([1, 2, 3])()!.tail()!.head());
+console.log(toList([1, 2, 3])()!.tail()!.tail()!.head());
+console.log(toList([1, 2, 3])()!.tail()!.tail()!.tail());
 
 function range(begin: Lazy<number>): LazyList<number> {
     return () => {
@@ -111,11 +111,11 @@ console.log("---");
 
 console.log(range(() => 3));
 console.log(range(() => 3)());
-console.log(range(() => 3)().head());
-console.log(range(() => 3)().tail().head());
-console.log(range(() => 3)().tail().tail().head());
-console.log(range(() => 3)().tail().tail().tail().head());
-console.log(range(() => 3)().tail().tail().tail().tail().head());
+console.log(range(() => 3)()!.head());
+console.log(range(() => 3)()!.tail()!.head());
+console.log(range(() => 3)()!.tail()!.tail()!.head());
+console.log(range(() => 3)()!.tail()!.tail()!.tail()!.head());
+console.log(range(() => 3)()!.tail()!.tail()!.tail()!.tail()!.head());
 
 function printList<T>(xs: LazyList<T>) {
     let pair = xs()
@@ -135,7 +135,7 @@ function take<T>(n: Lazy<number>, xs: LazyList<T>): LazyList<T> {
     return () => {
         let m = n();
         let pair = xs();
-        if (m > 0) {
+        if (m > 0 && pair !== null) {
             return {
                 head: pair.head,
                 tail: take(() => m - 1, pair.tail)
@@ -148,7 +148,7 @@ function take<T>(n: Lazy<number>, xs: LazyList<T>): LazyList<T> {
 
 printList(take(() => 10, range(() => 3)));
 
-function filter<T>(f: (T) => boolean, xs: LazyList<T>): LazyList<T> {
+function filter<T>(f: (x: T) => boolean, xs: LazyList<T>): LazyList<T> {
     return () => {
         let pair = xs();
         if (pair === null) {
